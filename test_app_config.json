@@ -1,0 +1,21 @@
+{
+  "ui": {
+    "theme": "default",
+    "default_download_folder": "navoahansen",
+    "default_upload_folder": "navoahansen"
+  },
+  "profiles": [
+    {
+      "name": "wasabi-main",
+      "bucket_name": "navoahansen",
+      "endpoint_url": "https://s3.ap-southeast-1.wasabisys.com",
+      "ssl_verify": true,
+      "ca_file": ""
+    }
+  ],
+  "last_profile": "wasabi-main",
+  "ssl": {
+    "verify": true,
+    "ca_file": ""
+  }
+}
