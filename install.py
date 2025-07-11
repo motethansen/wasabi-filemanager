@@ -19,8 +19,44 @@ subprocess.check_call([str(pip), 'install', '-r', 'requirements.txt'])
 print('Building app...')
 pyinstaller = venv_dir / ('Scripts/pyinstaller.exe' if sys.platform == 'win32' else 'bin/pyinstaller')
 icon = 'icon_win.ico' if sys.platform == 'win32' else ('icon_mac.icns' if sys.platform == 'darwin' else 'icon_linux.png')
-add_data = [f'--add-data={icon}{";." if sys.platform == "win32" else ":."}', '--add-data=app_config.json:.' , '--add-data=bookmarks.json:.']
-cmd = [str(pyinstaller), '--onefile', '--windowed', f'--icon={icon}'] + add_data + ['main.py']
+
+# Check if icon file exists, create a placeholder if not
+if not Path(icon).exists():
+    print(f'Warning: Icon file {icon} not found. Creating placeholder...')
+    try:
+        from PIL import Image
+        if icon.endswith('.png'):
+            img = Image.new('RGB', (32, 32), color='blue')
+            img.save(icon, 'PNG')
+        elif icon.endswith('.ico'):
+            img = Image.new('RGB', (32, 32), color='blue')
+            img.save(icon, 'ICO')
+        else:  # .icns
+            img = Image.new('RGB', (32, 32), color='blue')
+            img.save(icon, 'PNG')  # Basic approach for macOS
+    except ImportError:
+        print('Warning: PIL not available. Building without icon.')
+        icon = None
+
+# Check if bookmarks.json exists, create if not
+if not Path('bookmarks.json').exists():
+    print('Creating empty bookmarks.json...')
+    with open('bookmarks.json', 'w') as f:
+        f.write('[]')
+
+add_data = []
+if icon:
+    add_data.append(f'--add-data={icon}{";." if sys.platform == "win32" else ":."}') 
+if Path('app_config.json').exists():
+    add_data.append('--add-data=app_config.json:.')
+if Path('bookmarks.json').exists():
+    add_data.append('--add-data=bookmarks.json:.')
+
+cmd = [str(pyinstaller), '--onefile', '--windowed']
+if icon:
+    cmd.append(f'--icon={icon}')
+cmd.extend(add_data + ['main.py'])
+
 subprocess.check_call(cmd)
 
 # Create desktop shortcut (optional)

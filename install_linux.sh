@@ -3,7 +3,7 @@
 set -e
 
 # Check for required dependencies
-for dep in python3 python3-venv pip3 pyinstaller; do
+for dep in python3 python3-venv pip3; do
   if ! command -v $dep &> /dev/null; then
     echo "$dep is required. Please install it first."
     exit 1
