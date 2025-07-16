@@ -9,11 +9,13 @@ help:
 	@echo "  install       - Install all dependencies"
 	@echo "  install-dev   - Install development dependencies"
 	@echo "  run           - Run the application"
+	@echo "  run-quiet     - Run the application (suppress TK deprecation warning)"
 	@echo "  test-wasabi   - Test Wasabi connection"
 	@echo "  clean         - Clean up temporary files"
 
 setup-venv:
-	python3 -m venv venv
+	@echo "Creating virtual environment with system Python (has tkinter support)..."
+	/usr/bin/python3 -m venv venv
 	@echo "Virtual environment created. Activate with: source venv/bin/activate"
 
 install:
@@ -27,6 +29,9 @@ install-dev: install
 
 run:
 	python3 main.py
+
+run-quiet:
+	TK_SILENCE_DEPRECATION=1 python3 main.py
 
 clean:
 	find . -name '*.pyc' -delete

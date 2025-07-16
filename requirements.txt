@@ -1,8 +1,2 @@
+kivy>=2.2.0
 boto3
-cryptography
-Pillow
-pathlib
-keyring
-pyinstaller
-# tkinter is included with Python, but note for users:
-# For drag-and-drop: tkinterdnd2
